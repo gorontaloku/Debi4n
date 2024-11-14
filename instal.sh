@@ -21,7 +21,7 @@ echo ""
 echo "Ini Adalah Script Install Debian Di Termux"
 echo "Hati-Hati Dalam Penggunaan Script Ini"
 echo " Developer  : Bestmomen "
-echo " My Number  : 0082311123196 "
+echo " My Number  : 082311123196 "
 echo ""
 read -r -p "Please enter username for debian installation: " username </dev/tty
 
@@ -40,7 +40,7 @@ read -n 1 -s -r -p "Press any key to continue..."
 termux-setup-storage
 
 # Set the correct password here
-correct_password="as"
+correct_password="25"
 
 # Function to prompt for password
 prompt_for_password() {
@@ -72,9 +72,9 @@ mkdir -p Desktop
 mkdir -p Downloads
 
 #Download required install scripts
-wget https://github.com/wahyu22010/Debian/raw/main/xfce.sh
-wget https://github.com/wahyu22010/Debian/raw/main/root.sh
-wget https://github.com/wahyu22010/Debian/raw/main/utils.sh
+wget https://github.com/gorontaloku/Debi4n/raw/main/xfce.sh
+wget https://github.com/gorontaloku/Debi4n/raw/main/root.sh
+wget https://github.com/gorontaloku/Debi4n/raw/main/utils.sh
 chmod +x *.sh
 
 ./xfce.sh "$username"
@@ -111,4 +111,3 @@ rm xfce.sh
 rm root.sh
 rm utils.sh
 rm instal.sh
-
