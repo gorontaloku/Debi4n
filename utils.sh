@@ -24,138 +24,6 @@ pd login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 MESA_LOADER_DRI
 EOF
 chmod +x $PREFIX/bin/zrunhud
 
-#cp2menu utility ... Allows copying of Debian proot desktop menu items into Termux xfce menu to allow for launching programs from Debian proot from within the xfce menu rather than launching from terminal. 
-
-cat <<'EOF' > $PREFIX/bin/cp2menu
-#!/bin/bash
-
-cd
-
-user_dir="$PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/"
-
-# Get the username from the user directory
-username=$(basename "$user_dir"/*)
-
-action=$(zenity --list --title="Choose Action" --text="Select an action:" --radiolist --column="" --column="Action" TRUE "Copy .desktop file" FALSE "Remove .desktop file")
-
-if [[ -z $action ]]; then
-  zenity --info --text="No action selected. Quitting..." --title="Operation Cancelled"
-  exit 0
-fi
-
-if [[ $action == "Copy .desktop file" ]]; then
-  selected_file=$(zenity --file-selection --title="Select .desktop File" --file-filter="*.desktop" --filename="$PREFIX/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications")
-
-  if [[ -z $selected_file ]]; then
-    zenity --info --text="No file selected. Quitting..." --title="Operation Cancelled"
-    exit 0
-  fi
-
-  desktop_filename=$(basename "$selected_file")
-
-  cp "$selected_file" "$PREFIX/share/applications/"
-  sed -i "s/^Exec=\(.*\)$/Exec=pd login debian --user $username --shared-tmp -- env DISPLAY=:1.0 \1/" "$PREFIX/share/applications/$desktop_filename"
-
-  zenity --info --text="Operation completed successfully!" --title="Success"
-elif [[ $action == "Remove .desktop file" ]]; then
-  selected_file=$(zenity --file-selection --title="Select .desktop File to Remove" --file-filter="*.desktop" --filename="$PREFIX/share/applications")
-
-  if [[ -z $selected_file ]]; then
-    zenity --info --text="No file selected for removal. Quitting..." --title="Operation Cancelled"
-    exit 0
-  fi
-
-  desktop_filename=$(basename "$selected_file")
-
-  rm "$selected_file"
-
-  zenity --info --text="File '$desktop_filename' has been removed successfully!" --title="Success"
-fi
-
-EOF
-chmod +x $PREFIX/bin/cp2menu
-
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=cp2menu
-Comment=
-Exec=cp2menu
-Icon=edit-move
-Categories=System;
-Path=
-Terminal=false
-StartupNotify=false
-" > $PREFIX/share/applications/cp2menu.desktop 
-chmod +x $PREFIX/share/applications/cp2menu.desktop 
-
-#App Installer Utility .. For installing additional applications not available in Termux or Debian proot repositories. 
-cat <<'EOF' > "$PREFIX/bin/app-installer"
-#!/bin/bash
-
-# Define the directory paths
-INSTALLER_DIR="$HOME/.App-Installer"
-REPO_URL="https://github.com/wahyu22010/App-Installer.git"
-DESKTOP_DIR="$HOME/Desktop"
-APP_DESKTOP_FILE="$DESKTOP_DIR/app-installer.desktop"
-
-# Check if the directory already exists
-if [ ! -d "$INSTALLER_DIR" ]; then
-    # Directory doesn't exist, clone the repository
-    git clone "$REPO_URL" "$INSTALLER_DIR"
-    if [ $? -eq 0 ]; then
-        echo "Repository cloned successfully."
-    else
-        echo "Failed to clone repository. Exiting."
-        exit 1
-    fi
-else
-    echo "Directory already exists. Skipping clone."
-    "$INSTALLER_DIR/app-installer"
-fi
-
-# Check if the .desktop file exists
-if [ ! -f "$APP_DESKTOP_FILE" ]; then
-    # .desktop file doesn't exist, create it
-    echo "[Desktop Entry]
-    Version=1.0
-    Type=Application
-    Name=App Installer
-    Comment=
-    Exec=$PREFIX/bin/app-installer
-    Icon=package-install
-    Categories=System;
-    Path=
-    Terminal=false
-    StartupNotify=false
-" > "$APP_DESKTOP_FILE"
-    chmod +x "$APP_DESKTOP_FILE"
-fi
-
-# Ensure the app-installer script is executable
-chmod +x "$INSTALLER_DIR/app-installer"
-
-EOF
-chmod +x "$PREFIX/bin/app-installer"
-bash $PREFIX/bin/app-installer
-
-# Check if the .desktop file exists
-if [ ! -f "$HOME/Desktop/app-installer.desktop" ]; then
-# .desktop file doesn't exist, create it
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=App Installer
-Comment=
-Exec=$PREFIX/bin/app-installer
-Icon=package-install
-Categories=System;
-Path=
-Terminal=false
-StartupNotify=false
-" > "$HOME/Desktop/app-installer.desktop"
-chmod +x "$HOME/Desktop/app-installer.desktop"
-fi
 
 #Start script
 cat <<'EOF' > start
@@ -176,7 +44,7 @@ MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.
 
 #MESA_LOADER_DRIVER_OVERRIDE=zink TU_DEBUG=noconform program
 
-env DISPLAY=:1.0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
+env DISPLAY=:1.0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session startxfce4 & > /dev/null 2>&1
 # Set audio server
 export PULSE_SERVER=127.0.0.1 > /dev/null 2>&1
 
@@ -202,7 +70,7 @@ fi
 
 # Get the process IDs of Termux-X11 and XFCE sessions
 termux_x11_pid=$(pgrep -f /system/bin/app_process.*com.termux.x11.Loader)
-xfce_pid=$(pgrep -f "xfce4-session")
+xfce_pid=$(pgrep -f "startxfce4")
 
 # Add debug output
 echo "Termux-X11 PID: $termux_x11_pid"
