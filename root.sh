@@ -20,10 +20,15 @@ username="$1"
 pkgs_proot=('sudo' 'wget' 'nala' 'jq' 'conky-all')
 
 #Install Debian proot
-pd install debian
+cp $HOME/storage/downloads/debian.tar.gz $PREFIX/var/lib/proot-distro/installed-rootfs/
+cd $PREFIX/var/lib/proot-distro/installed-rootfs/
+tar -zxvf debian.tar.gz
 pd login debian --shared-tmp -- env DISPLAY=:1.0 apt update
 pd login debian --shared-tmp -- env DISPLAY=:1.0 apt upgrade -y
 pd login debian --shared-tmp -- env DISPLAY=:1.0 apt install "${pkgs_proot[@]}" -y -o Dpkg::Options::="--force-confold"
+
+cd $PREFIX/var/lib/proot-distro/installed-rootfs/debian/
+chmod +x Notify.sh
 
 #Create user
 pd login debian --shared-tmp -- env DISPLAY=:1.0 groupadd storage
@@ -31,9 +36,9 @@ pd login debian --shared-tmp -- env DISPLAY=:1.0 groupadd wheel
 pd login debian --shared-tmp -- env DISPLAY=:1.0 useradd -m -g users -G wheel,audio,video,storage -s /bin/bash "$username"
 
 #Add user to sudoers
-chmod u+rw $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
-echo "$username ALL=(ALL) NOPASSWD:ALL" | tee -a $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers > /dev/null
-chmod u-w  $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
+#chmod u+rw $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
+#echo "$username ALL=(ALL) NOPASSWD:ALL" | tee -a $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers > /dev/null
+#chmod u-w  $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 
 #Set proot DISPLAY
 echo "export DISPLAY=:1.0" >> $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
@@ -83,9 +88,3 @@ cp .fonts/NotoColorEmoji-Regular.ttf $PREFIX/var/lib/proot-distro/installed-root
 #Setup Hardware Acceleration
 pd login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/wahyu22010/Debian/raw/main/mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb
 pd login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt install -y ./mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb
-
-#Setup Wpsoffice dan Libreoffice
-pd login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt install gdebi libreoffice -y
-pd login debian --shared-tmp -- env DISPLAY=:1.0 wget https://wpsoffice.wahyupratama-purba2004.workers.dev/0:/wpsoffice.deb
-pd login debian --shared-tmp -- env DISPLAY=:1.0 sudo -S apt install ./wpsoffice.deb -y
-pd login debian --shared-tmp -- env DISPLAY=:1.0 rm -rf wpsoffice.deb
