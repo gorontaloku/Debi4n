@@ -26,8 +26,8 @@ echo ""
 #read -r -p "Please enter username for debian installation: " username </dev/tty
 
 termux-change-repo
-pkg update -y -o Dpkg::Options::="--force-confold"
-pkg upgrade -y -o Dpkg::Options::="--force-confold"
+pkg update -y 
+pkg upgrade -y 
 sed -i '12s/^#//' $HOME/.termux/termux.properties
 
 # Display a message 
