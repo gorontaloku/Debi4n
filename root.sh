@@ -22,7 +22,7 @@ pkgs_proot=('sudo' 'wget' 'nala' 'jq' 'conky-all')
 #Install Debian proot
 cp $HOME/storage/downloads/debian.tar.gz $PREFIX/var/lib/proot-distro/installed-rootfs/
 cd $PREFIX/var/lib/proot-distro/installed-rootfs/
-tar -zxvf debian.tar.gz
+tar -zxf debian.tar.gz
 pd login debian --shared-tmp -- env DISPLAY=:1.0 apt update
 pd login debian --shared-tmp -- env DISPLAY=:1.0 apt upgrade -y
 pd login debian --shared-tmp -- env DISPLAY=:1.0 apt install "${pkgs_proot[@]}" -y -o Dpkg::Options::="--force-confold"
