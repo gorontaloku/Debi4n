@@ -28,7 +28,7 @@ read -r -p "Please enter username for debian installation: " username </dev/tty
 termux-change-repo
 pkg update -y -o Dpkg::Options::="--force-confold"
 pkg upgrade -y -o Dpkg::Options::="--force-confold"
-sed -i '12s/^#//' $HOME/.termux/termux.properties
+sed -i '5s/^#//' $HOME/.termux/termux.properties
 
 # Display a message 
 clear -x
@@ -62,7 +62,7 @@ done
 
 clear
 
-pkgs=( 'wget' 'ncurses-utils' 'dbus' 'proot-distro' 'x11-repo' 'tur-repo' 'android-tools' 'pulseaudio')
+pkgs=( 'wget' 'termux-x11-nightly' 'file' 'virglrenderer-android''dbus' 'proot-distro' 'x11-repo' 'tur-repo' 'android-tools' 'pulseaudio')
 pkg uninstall dbus -y
 pkg update
 pkg install "${pkgs[@]}" -y -o Dpkg::Options::="--force-confold"
@@ -91,14 +91,9 @@ echo "Downloading Termux-X11"
 # Unduh termux x11
 wget https://github.com/termux/termux-x11/releases/download/nightly/app-arm64-v8a-debug.apk
 mv app-arm64-v8a-debug.apk $HOME/storage/downloads/
-#termux-open $HOME/storage/downloads/app-arm64-v8a-debug.apk
 
 source $PREFIX/etc/bash.bashrc
 termux-reload-settings
-
-#Downloads File wpsoffice
-wget https://wpsoffice.wahyupratama-purba2004.workers.dev/0:/wpsoffice.deb
-mv wpsoffice.deb $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/
 
 clear -x
 echo ""
