@@ -28,7 +28,7 @@ echo ""
 termux-change-repo
 pkg update -y -o Dpkg::Options::="--force-confold"
 pkg upgrade -y -o Dpkg::Options::="--force-confold"
-sed -i '5s/^#//' $HOME/.termux/termux.properties
+sed -i '12s/^#//' $HOME/.termux/termux.properties
 
 # Display a message 
 clear -x
