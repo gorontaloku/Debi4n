@@ -25,7 +25,7 @@ alias list='nala list --upgradeable'
 alias show='nala show'
 " >> $PREFIX/etc/bash.bashrc
 
-#Install WhiteSur-Dark Theme
+#Install Qogir Theme
 wget https://github.com/gorontaloku/Debi4n/raw/refs/heads/main/Qogir.tar.x
 tar -xf Qogir.tar.xz
 mv Qogir/ $PREFIX/share/themes/
