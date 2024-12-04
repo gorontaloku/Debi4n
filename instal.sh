@@ -23,7 +23,7 @@ echo "Hati-Hati Dalam Penggunaan Script Ini"
 echo " Developer  : Bestmomen "
 echo " My Number  : 082311123196 "
 echo ""
-read -r -p "Please enter username for debian installation: " username </dev/tty
+#read -r -p "Please enter username for debian installation: " username </dev/tty
 
 termux-change-repo
 pkg update -y -o Dpkg::Options::="--force-confold"
@@ -62,7 +62,7 @@ done
 
 clear
 
-pkgs=( 'wget' 'termux-x11-nightly' 'file' 'virglrenderer-android''dbus' 'proot-distro' 'x11-repo' 'tur-repo' 'android-tools' 'pulseaudio')
+pkgs=( 'wget' 'termux-x11-nightly' 'file' 'virglrenderer-android''dbus' 'proot-distro' 'x11-repo' 'tur-repo' 'android-tools' 'zsh' 'git' 'pulseaudio')
 pkg uninstall dbus -y
 pkg update
 pkg install "${pkgs[@]}" -y -o Dpkg::Options::="--force-confold"
@@ -70,6 +70,9 @@ pkg install "${pkgs[@]}" -y -o Dpkg::Options::="--force-confold"
 #Create default directories
 mkdir -p Desktop
 mkdir -p Downloads
+
+mkdir -p $PREFIX/var/lib/proot-distro
+mkdir -p $PREFIX/var/lib/proot-distro/installed-rootfs
 
 #Download required install scripts
 wget https://github.com/gorontaloku/Debi4n/raw/main/xfce.sh
