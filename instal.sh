@@ -62,7 +62,7 @@ done
 
 clear
 
-pkgs=( 'wget' 'termux-x11-nightly' 'file' 'virglrenderer-android''dbus' 'proot-distro' 'x11-repo' 'tur-repo' 'android-tools' 'zsh' 'git' 'pulseaudio')
+pkgs=( 'wget' 'file' 'dbus' 'proot-distro' 'x11-repo' 'termux-x11-nightly' 'tur-repo' 'android-tools' 'zsh' 'git' 'pulseaudio' 'virglrenderer-android')
 pkg uninstall dbus -y
 pkg update
 pkg install "${pkgs[@]}" -y -o Dpkg::Options::="--force-confold"
