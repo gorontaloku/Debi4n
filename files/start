@@ -1,6 +1,6 @@
 #!/bin/bash
 
-virgl_test_server_android --angle-gl & > /dev/null 2>&1
+virgl_test_server_android & > /dev/null 2>&1
 sleep 1
 XDG_RUNTIME_DIR=${TMPDIR} termux-x11 :1.0 &
 sleep 1
